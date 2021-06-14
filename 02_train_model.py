@@ -44,13 +44,9 @@ from feature_engine.selection import DropFeatures
 from feature_engine.wrappers import SklearnTransformerWrapper
 
 # load config
-<<<<<<< HEAD
-with open("config.pickle", "rb") as f:
-    config = pickle.load(f)
-=======
 with open('config.yml') as infile:
       config = yaml.load(infile, Loader=yaml.FullLoader)
->>>>>>> a3eee6b17130f9ac9bff477f84e75e78d57cbc8a
+
 
 # import preprocessors as pp
 

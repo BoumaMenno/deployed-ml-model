@@ -208,14 +208,6 @@ config = {  "CATEGORICAL_FEATURES" : categoricalFeatures,
             "FEATURES" : categoricalFeatures+numericalFeatures,
               }
 
-<<<<<<< HEAD
-# dump to pickle
-with open("config.pickle", "wb") as f:
-    pickle.dump(config_dict, f)
-=======
 # dump to yaml
 with open('config.yml', 'w') as outfile:
     yaml.dump(config, outfile)
-
-
->>>>>>> a3eee6b17130f9ac9bff477f84e75e78d57cbc8a
