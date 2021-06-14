@@ -99,7 +99,7 @@ finishFeatures = ['BsmtFinType1', 'BsmtFinType2']
 for feat in finishFeatures:
     data[feat] = data[feat].map(finishMap)
     
-allQualityFeatures = qualityFeatures + finishFeatures + ['BsmtExposure','GarageFinish','Fence']
+mappedCategoricalFeatures = qualityFeatures + finishFeatures + ['BsmtExposure','GarageFinish','Fence']
 
 def categoryPlots(df, features):
     df = df[features+target].copy()
@@ -107,9 +107,9 @@ def categoryPlots(df, features):
     sns.catplot(data=df, x='value', y=target[0], col='Feature', col_wrap=4, kind = 'box', sharex=False)
     plt.show()
 
-categoryPlots(data, allQualityFeatures)
+categoryPlots(data, mappedCategoricalFeatures)
 
-remainingCategoricalFeatures = [ feat for feat in categoricalFeatures if feat not in allQualityFeatures ]
+unmappedCategoricalFeatures = [ feat for feat in categoricalFeatures if feat not in mappedCategoricalFeatures ]
 
 # Rare labels
 def findRareLabels(df, feat, rare_perc):
@@ -121,7 +121,7 @@ def findRareLabels(df, feat, rare_perc):
     # return categories that are rare
     return perc[perc < rare_perc]
 
-for feat in remainingCategoricalFeatures:
+for feat in unmappedCategoricalFeatures:
     print(findRareLabels(data, feat, 0.01))
     print()
     
@@ -161,33 +161,6 @@ plt.show()
 
 """ Data is heavily skewed, and not all variables can be transformed using a log transformation. To do: which transformation to use? """
 
-## Save configuration ##
-# Categoricals
-# CATEGORICAL_FEATURES = categoricalFeatures
-
-# CATEGORICAL_WITH_MISSING = [ feat for feat in categoricalWithMissing if feat not in featuresWithHighMissing]
-# CATEGORICAL_WITH_HIGH_MISSING = featuresWithHighMissing
-
-# # Mappings
-# QUALITY_FEATURES = qualityFeatures
-# FINISH_FEATURES = finishFeatures
-# BASEMENT_EXPOSURE_FEATURES = ['BsmtExposure']
-# GARAGE_FINISH_FEATURES = ['GarageFinish']
-# FENCE_FEATURES = ['Fence']
-
-# QUALITY_MAP = qualityMap
-# FINISH_MAP = finishMap
-# BASEMENT_EXPOSURE_MAP = basementExposureMap
-# GARAGE_FINISH_MAP = garageFinishMap
-# FENCE_MAP = fenceMap
-
-# # Numericals
-# NUMERICAL_FEATURES = numericalFeatures
-# NUMERICAL_WITH_MISSING = numericalWithMissing
-
-# YEAR_FEATURES = yearFeatures
-# REFERENCE_FEATURE = referenceFeature
-
 config = {  "CATEGORICAL_FEATURES" : categoricalFeatures,
             "CATEGORICAL_WITH_MISSING" : [ feat for feat in categoricalWithMissing if feat not in featuresWithHighMissing],
             "CATEGORICAL_WITH_HIGH_MISSING" : featuresWithHighMissing,
@@ -201,6 +174,7 @@ config = {  "CATEGORICAL_FEATURES" : categoricalFeatures,
             "BASEMENT_EXPOSURE_MAP" : basementExposureMap,
             "GARAGE_FINISH_MAP" : garageFinishMap,
             "FENCE_MAP" : fenceMap,
+            "UNMAPPED_CATEGORICAL_FEATURES" : unmappedCategoricalFeatures,
             "NUMERICAL_FEATURES" : numericalFeatures,
             "NUMERICAL_WITH_MISSING" : numericalWithMissing,
             "YEAR_FEATURES" : yearFeatures,

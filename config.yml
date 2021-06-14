@@ -234,6 +234,37 @@ QUALITY_MAP:
   TA: 3
 REFERENCE_FEATURE:
 - YrSold
+UNMAPPED_CATEGORICAL_FEATURES:
+- MSZoning
+- Street
+- Alley
+- LotShape
+- LandContour
+- Utilities
+- LotConfig
+- LandSlope
+- Neighborhood
+- Condition1
+- Condition2
+- BldgType
+- HouseStyle
+- RoofStyle
+- RoofMatl
+- Exterior1st
+- Exterior2nd
+- MasVnrType
+- Foundation
+- Heating
+- CentralAir
+- Electrical
+- Functional
+- GarageType
+- PavedDrive
+- PoolQC
+- MiscFeature
+- SaleType
+- SaleCondition
+- MSSubClass
 YEAR_FEATURES:
 - YearBuilt
 - YearRemodAdd

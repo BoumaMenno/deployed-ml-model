@@ -67,59 +67,9 @@ X_test[config["FEATURES"]]
 y_train = np.log(y_train)
 y_test = np.log(y_test)
 
-# impute_missing = CategoricalImputer(imputation_method='missing', variables=config["CATEGORICAL_WITH_HIGH_MISSING"])
-# impute_missing.fit(X_train)
-# X_train = impute_missing.transform(X_train)
-# X_test = impute_missing.transform(X_test)
-
-# impute_frequent = CategoricalImputer(imputation_method='frequent', variables=config["CATEGORICAL_WITH_MISSING"])
-# impute_frequent.fit(X_train)
-# X_train = impute_frequent.transform(X_train)
-# X_test = impute_frequent.transform(X_test)
-
-# impute_median = MeanMedianImputer(imputation_method='mean', variables=config["NUMERICAL_WITH_MISSING"])
-# impute_median.fit(X_train)
-# X_train = impute_median.transform(X_train)
-# X_test = impute_median.transform(X_test)
-
-# ordinal_encoder = OrdinalEncoder(encoding_method='ordered', variables=config["CATEGORICAL_FEATURES"])
-# ordinal_encoder.fit(X_train,y_train)
-# X_train = ordinal_encoder.transform(X_train)
-# X_test = ordinal_encoder.transform(X_test)
-
-transformline = Pipeline([
-    # impute categorical variables with string missing
-    ('missing_imputation', CategoricalImputer(imputation_method='missing', variables=config["CATEGORICAL_WITH_HIGH_MISSING"])),
-
-    ('frequent_imputation', CategoricalImputer(imputation_method='frequent', variables=config["CATEGORICAL_WITH_MISSING"])),
-
-    # add missing indicator
-    ('missing_indicator', AddMissingIndicator(variables=config["NUMERICAL_WITH_MISSING"])),
-
-    # impute numerical variables with the mean
-    ('mean_imputation', MeanMedianImputer(imputation_method='mean', variables=config["NUMERICAL_WITH_MISSING"])),
-    
-    # calculate ages from year values
-    ('elapsed_time', CombineWithReferenceFeature(variables_to_combine=config["YEAR_FEATURES"], reference_variables=config["REFERENCE_FEATURE"])),
-
-    ('drop_features', DropFeatures(features_to_drop=config["REFERENCE_FEATURE"])),
-
-    # apply mappings to categorical features
-    ('mapper_qual', transformers.Mapper(variables=config["QUALITY_FEATURES"], mappings=config["QUALITY_MAP"])),
-
-    ('mapper_exposure', transformers.Mapper(variables=config["BASEMENT_EXPOSURE_FEATURES"], mappings=config["BASEMENT_EXPOSURE_MAP"])),
-
-    ('mapper_finish', transformers.Mapper(variables=config["FINISH_FEATURES"], mappings=config["FINISH_MAP"])),
-
-    ('mapper_garage', transformers.Mapper(variables=config["GARAGE_FINISH_FEATURES"], mappings=config["GARAGE_FINISH_MAP"])),
-
-    ('mapper_fence', transformers.Mapper(variables=config["FENCE_FEATURES"], mappings=config["FENCE_MAP"])),
-])
-
-# df = pd.DataFrame(X_train)
 pipeline = Pipeline([
     # impute categorical variables with string missing
-    ('missing_imputation', CategoricalImputer(imputation_method='missing', variables=config["CATEGORICAL_WITH_HIGH_MISSING"])),
+    ('missing_imputation', CategoricalImputer(imputation_method='missing', fill_value='NA', variables=config["CATEGORICAL_WITH_HIGH_MISSING"])),
 
     ('frequent_imputation', CategoricalImputer(imputation_method='frequent', variables=config["CATEGORICAL_WITH_MISSING"])),
 
@@ -130,7 +80,7 @@ pipeline = Pipeline([
     ('mean_imputation', MeanMedianImputer(imputation_method='mean', variables=config["NUMERICAL_WITH_MISSING"])),
     
     # calculate ages from year values
-    ('elapsed_time', CombineWithReferenceFeature(variables_to_combine=config["YEAR_FEATURES"], reference_variables=config["REFERENCE_FEATURE"])),
+    ('elapsed_time', CombineWithReferenceFeature(variables_to_combine=config["REFERENCE_FEATURE"], reference_variables=config["YEAR_FEATURES"])),
 
     ('drop_features', DropFeatures(features_to_drop=config["REFERENCE_FEATURE"])),
 
@@ -146,20 +96,42 @@ pipeline = Pipeline([
     ('mapper_fence', transformers.Mapper(variables=config["FENCE_FEATURES"], mappings=config["FENCE_MAP"])),
 
     # label all rare values as 'rare'
-    ('rare_label_encoder', RareLabelEncoder(tol=0.01, n_categories=1, variables=config["CATEGORICAL_FEATURES"])),
+    ('rare_label_encoder', RareLabelEncoder(tol=0.01, n_categories=1, variables=config["UNMAPPED_CATEGORICAL_FEATURES"])),
 
     # encode categorical and discrete variables using the target mean
-    ('categorical_encoder', OrdinalEncoder(encoding_method='ordered', variables=config["CATEGORICAL_FEATURES"])),
+    ('categorical_encoder', OrdinalEncoder(encoding_method='ordered', variables=config["UNMAPPED_CATEGORICAL_FEATURES"])),
     
     ('scaler', MinMaxScaler()),
 #     ('selector', SelectFromModel(Lasso(alpha=0.001, random_state=0))),
     ('Lasso', Lasso(alpha=0.001, random_state=0)),
 ])
 
+# X_train_trans = pd.DataFrame(pipeline.fit_transform(X_train, y_train))
+# print(X_train_trans.isna().sum().sort_values(ascending=False))
 
-X_train_trans = transformline.fit_transform(X_train, y_train)
-df = pd.DataFrame(X_train_trans)
-df.isna().sum().sort_values(ascending=False)
-""" nan-values in this set, check data analysis why this happens """
 # make predictions for train set
-# pred = pipeline.predict(X_train)
+pipeline.fit(X_train, y_train)
+pred = pipeline.predict(X_train)
+
+# determine mse, rmse and r2
+print('train mse: {}'.format(int(
+    mean_squared_error(np.exp(y_train), np.exp(pred)))))
+print('train rmse: {}'.format(int(
+    mean_squared_error(np.exp(y_train), np.exp(pred), squared=False))))
+print('train r2: {}'.format(
+    r2_score(np.exp(y_train), np.exp(pred))))
+print()
+
+# make predictions for test set
+pred = pipeline.predict(X_test)
+
+# determine mse, rmse and r2
+print('test mse: {}'.format(int(
+    mean_squared_error(np.exp(y_test), np.exp(pred)))))
+print('test rmse: {}'.format(int(
+    mean_squared_error(np.exp(y_test), np.exp(pred), squared=False))))
+print('test r2: {}'.format(
+    r2_score(np.exp(y_test), np.exp(pred))))
+print()
+
+print('Average house price: ', int(np.exp(y_train).median()))
