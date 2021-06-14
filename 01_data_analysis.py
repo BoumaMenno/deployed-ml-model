@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-import pickle
+import yaml
 
 sns.set_theme(style="ticks")
 
@@ -189,28 +189,29 @@ NUMERICAL_WITH_MISSING = numericalWithMissing
 YEAR_FEATURES = yearFeatures
 REFERENCE_FEATURE = referenceFeature
 
-config_dict = {"CATEGORICAL_FEATURES" : categoricalFeatures,
-              "CATEGORICAL_WITH_MISSING" : [ feat for feat in categoricalWithMissing if feat not in featuresWithHighMissing],
-              "CATEGORICAL_WITH_HIGH_MISSING" : featuresWithHighMissing,
-              "QUALITY_FEATURES" : qualityFeatures,
-              "FINISH_FEATURES" : finishFeatures,
-              "BASEMENT_EXPOSURE_FEATURES" : ['BsmtExposure'],
-              "GARAGE_FINISH_FEATURES" : ['GarageFinish'],
-              "FENCE_FEATURES" : ['Fence'],
-              "QUALITY_MAP" : qualityMap,
-              "FINISH_MAP" : finishMap,
-              "BASEMENT_EXPOSURE_MAP" : basementExposureMap,
-              "GARAGE_FINISH_MAP" : garageFinishMap,
-              "FENCE_MAP" : fenceMap,
-              "NUMERICAL_FEATURES" : numericalFeatures,
-              "NUMERICAL_WITH_MISSING" : numericalWithMissing,
-              "YEAR_FEATURES" : yearFeatures,
-              "REFERENCE_FEATURE" : referenceFeature,
+config = {  "CATEGORICAL_FEATURES" : categoricalFeatures,
+            "CATEGORICAL_WITH_MISSING" : [ feat for feat in categoricalWithMissing if feat not in featuresWithHighMissing],
+            "CATEGORICAL_WITH_HIGH_MISSING" : featuresWithHighMissing,
+            "QUALITY_FEATURES" : qualityFeatures,
+            "FINISH_FEATURES" : finishFeatures,
+            "BASEMENT_EXPOSURE_FEATURES" : ['BsmtExposure'],
+            "GARAGE_FINISH_FEATURES" : ['GarageFinish'],
+            "FENCE_FEATURES" : ['Fence'],
+            "QUALITY_MAP" : qualityMap,
+            "FINISH_MAP" : finishMap,
+            "BASEMENT_EXPOSURE_MAP" : basementExposureMap,
+            "GARAGE_FINISH_MAP" : garageFinishMap,
+            "FENCE_MAP" : fenceMap,
+            "NUMERICAL_FEATURES" : numericalFeatures,
+            "NUMERICAL_WITH_MISSING" : numericalWithMissing,
+            "YEAR_FEATURES" : yearFeatures,
+            "REFERENCE_FEATURE" : referenceFeature,
+            "FEATURES" : categoricalFeatures+numericalFeatures,
               }
 # Transformations (todo)
 
-# dump to pickle
-with open("config.pickle", "wb") as f:
-    pickle.dump(config_dict, f)
+# dump to yaml
+with open('config.yml', 'w') as outfile:
+    yaml.dump(config, outfile)
 
 
