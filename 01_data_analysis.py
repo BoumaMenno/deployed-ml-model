@@ -34,7 +34,7 @@ plt.ylabel('Number of houses')
 plt.xlabel('Log of '+target[0])
 plt.show()
 
-""" Applying a log transform brings the target closer to guassian """
+""" Applying a log transform brings the target closer to gaussian """
 
 ## Explore data types and missing values ##
 data.info()
@@ -81,7 +81,7 @@ data[categoricalFeatures].nunique().sort_values(ascending=False).plot.bar(figsiz
 """ Low cardinality, so no action needed """
 
 # from data_description.txt we can define the following mappings
-basementExposureMap = {'No': 1, 'Mn': 2, 'Av': 3, 'Gd': 4, 'NA': 0}
+basementExposureMap = {'NA': 0, 'No': 1, 'Mn': 2, 'Av': 3, 'Gd': 4}
 garageFinishMap = {'NA': 0, 'Unf': 1, 'RFn': 2, 'Fin': 3}
 fenceMap = {'NA': 0, 'MnWw': 1, 'GdWo': 2, 'MnPrv': 3, 'GdPrv': 4}
 qualityMap = {'NA': 0,'Po': 1, 'Fa': 2, 'TA': 3, 'Gd': 4, 'Ex': 5}
@@ -121,12 +121,11 @@ def findRareLabels(df, feat, rare_perc):
     # return categories that are rare
     return perc[perc < rare_perc]
 
-
 for feat in remainingCategoricalFeatures:
     print(findRareLabels(data, feat, 0.01))
     print()
     
-""" Several rare labels are found in the data, these should be removed as they tend to overfit """
+""" Several rare labels are found in the data, these should be removed as they tend to overfit. To do: what to do with rare labels? """
 
 ## Explore numerical features ##
 # select year features
@@ -164,30 +163,30 @@ plt.show()
 
 ## Save configuration ##
 # Categoricals
-CATEGORICAL_FEATURES = categoricalFeatures
+# CATEGORICAL_FEATURES = categoricalFeatures
 
-CATEGORICAL_WITH_MISSING = [ feat for feat in categoricalWithMissing if feat not in featuresWithHighMissing]
-CATEGORICAL_WITH_HIGH_MISSING = featuresWithHighMissing
+# CATEGORICAL_WITH_MISSING = [ feat for feat in categoricalWithMissing if feat not in featuresWithHighMissing]
+# CATEGORICAL_WITH_HIGH_MISSING = featuresWithHighMissing
 
-# Mappings
-QUALITY_FEATURES = qualityFeatures
-FINISH_FEATURES = finishFeatures
-BASEMENT_EXPOSURE_FEATURES = ['BsmtExposure']
-GARAGE_FINISH_FEATURES = ['GarageFinish']
-FENCE_FEATURES = ['Fence']
+# # Mappings
+# QUALITY_FEATURES = qualityFeatures
+# FINISH_FEATURES = finishFeatures
+# BASEMENT_EXPOSURE_FEATURES = ['BsmtExposure']
+# GARAGE_FINISH_FEATURES = ['GarageFinish']
+# FENCE_FEATURES = ['Fence']
 
-QUALITY_MAP = qualityMap
-FINISH_MAP = finishMap
-BASEMENT_EXPOSURE_MAP = basementExposureMap
-GARAGE_FINISH_MAP = garageFinishMap
-FENCE_MAP = fenceMap
+# QUALITY_MAP = qualityMap
+# FINISH_MAP = finishMap
+# BASEMENT_EXPOSURE_MAP = basementExposureMap
+# GARAGE_FINISH_MAP = garageFinishMap
+# FENCE_MAP = fenceMap
 
-# Numericals
-NUMERICAL_FEATURES = numericalFeatures
-NUMERICAL_WITH_MISSING = numericalWithMissing
+# # Numericals
+# NUMERICAL_FEATURES = numericalFeatures
+# NUMERICAL_WITH_MISSING = numericalWithMissing
 
-YEAR_FEATURES = yearFeatures
-REFERENCE_FEATURE = referenceFeature
+# YEAR_FEATURES = yearFeatures
+# REFERENCE_FEATURE = referenceFeature
 
 config_dict = {"CATEGORICAL_FEATURES" : categoricalFeatures,
               "CATEGORICAL_WITH_MISSING" : [ feat for feat in categoricalWithMissing if feat not in featuresWithHighMissing],
@@ -207,10 +206,7 @@ config_dict = {"CATEGORICAL_FEATURES" : categoricalFeatures,
               "YEAR_FEATURES" : yearFeatures,
               "REFERENCE_FEATURE" : referenceFeature,
               }
-# Transformations (todo)
 
 # dump to pickle
 with open("config.pickle", "wb") as f:
     pickle.dump(config_dict, f)
-
-
