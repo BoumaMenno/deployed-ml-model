@@ -1,0 +1,240 @@
+BASEMENT_EXPOSURE_FEATURES:
+- BsmtExposure
+BASEMENT_EXPOSURE_MAP:
+  Av: 3
+  Gd: 4
+  Mn: 2
+  NA: 0
+  'No': 1
+CATEGORICAL_FEATURES:
+- MSZoning
+- Street
+- Alley
+- LotShape
+- LandContour
+- Utilities
+- LotConfig
+- LandSlope
+- Neighborhood
+- Condition1
+- Condition2
+- BldgType
+- HouseStyle
+- RoofStyle
+- RoofMatl
+- Exterior1st
+- Exterior2nd
+- MasVnrType
+- ExterQual
+- ExterCond
+- Foundation
+- BsmtQual
+- BsmtCond
+- BsmtExposure
+- BsmtFinType1
+- BsmtFinType2
+- Heating
+- HeatingQC
+- CentralAir
+- Electrical
+- KitchenQual
+- Functional
+- FireplaceQu
+- GarageType
+- GarageFinish
+- GarageQual
+- GarageCond
+- PavedDrive
+- PoolQC
+- Fence
+- MiscFeature
+- SaleType
+- SaleCondition
+- MSSubClass
+CATEGORICAL_WITH_HIGH_MISSING:
+- Alley
+- FireplaceQu
+- PoolQC
+- Fence
+- MiscFeature
+CATEGORICAL_WITH_MISSING:
+- MasVnrType
+- BsmtQual
+- BsmtCond
+- BsmtExposure
+- BsmtFinType1
+- BsmtFinType2
+- Electrical
+- GarageType
+- GarageFinish
+- GarageQual
+- GarageCond
+FEATURES:
+- MSZoning
+- Street
+- Alley
+- LotShape
+- LandContour
+- Utilities
+- LotConfig
+- LandSlope
+- Neighborhood
+- Condition1
+- Condition2
+- BldgType
+- HouseStyle
+- RoofStyle
+- RoofMatl
+- Exterior1st
+- Exterior2nd
+- MasVnrType
+- ExterQual
+- ExterCond
+- Foundation
+- BsmtQual
+- BsmtCond
+- BsmtExposure
+- BsmtFinType1
+- BsmtFinType2
+- Heating
+- HeatingQC
+- CentralAir
+- Electrical
+- KitchenQual
+- Functional
+- FireplaceQu
+- GarageType
+- GarageFinish
+- GarageQual
+- GarageCond
+- PavedDrive
+- PoolQC
+- Fence
+- MiscFeature
+- SaleType
+- SaleCondition
+- MSSubClass
+- LotFrontage
+- LotArea
+- OverallQual
+- OverallCond
+- YearBuilt
+- YearRemodAdd
+- MasVnrArea
+- BsmtFinSF1
+- BsmtFinSF2
+- BsmtUnfSF
+- TotalBsmtSF
+- 1stFlrSF
+- 2ndFlrSF
+- LowQualFinSF
+- GrLivArea
+- BsmtFullBath
+- BsmtHalfBath
+- FullBath
+- HalfBath
+- BedroomAbvGr
+- KitchenAbvGr
+- TotRmsAbvGrd
+- Fireplaces
+- GarageYrBlt
+- GarageCars
+- GarageArea
+- WoodDeckSF
+- OpenPorchSF
+- EnclosedPorch
+- 3SsnPorch
+- ScreenPorch
+- PoolArea
+- MiscVal
+- MoSold
+- YrSold
+FENCE_FEATURES:
+- Fence
+FENCE_MAP:
+  GdPrv: 4
+  GdWo: 2
+  MnPrv: 3
+  MnWw: 1
+  NA: 0
+FINISH_FEATURES:
+- BsmtFinType1
+- BsmtFinType2
+FINISH_MAP:
+  ALQ: 5
+  BLQ: 4
+  GLQ: 6
+  LwQ: 2
+  NA: 0
+  Rec: 3
+  Unf: 1
+GARAGE_FINISH_FEATURES:
+- GarageFinish
+GARAGE_FINISH_MAP:
+  Fin: 3
+  NA: 0
+  RFn: 2
+  Unf: 1
+NUMERICAL_FEATURES:
+- LotFrontage
+- LotArea
+- OverallQual
+- OverallCond
+- YearBuilt
+- YearRemodAdd
+- MasVnrArea
+- BsmtFinSF1
+- BsmtFinSF2
+- BsmtUnfSF
+- TotalBsmtSF
+- 1stFlrSF
+- 2ndFlrSF
+- LowQualFinSF
+- GrLivArea
+- BsmtFullBath
+- BsmtHalfBath
+- FullBath
+- HalfBath
+- BedroomAbvGr
+- KitchenAbvGr
+- TotRmsAbvGrd
+- Fireplaces
+- GarageYrBlt
+- GarageCars
+- GarageArea
+- WoodDeckSF
+- OpenPorchSF
+- EnclosedPorch
+- 3SsnPorch
+- ScreenPorch
+- PoolArea
+- MiscVal
+- MoSold
+- YrSold
+NUMERICAL_WITH_MISSING:
+- LotFrontage
+- MasVnrArea
+- GarageYrBlt
+QUALITY_FEATURES:
+- ExterQual
+- ExterCond
+- BsmtQual
+- BsmtCond
+- HeatingQC
+- KitchenQual
+- FireplaceQu
+- GarageQual
+- GarageCond
+QUALITY_MAP:
+  Ex: 5
+  Fa: 2
+  Gd: 4
+  NA: 0
+  Po: 1
+  TA: 3
+REFERENCE_FEATURE:
+- YrSold
+YEAR_FEATURES:
+- YearBuilt
+- YearRemodAdd
+- GarageYrBlt
