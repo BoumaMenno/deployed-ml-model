@@ -107,33 +107,35 @@ pipeline = Pipeline([
 
 # make predictions for train set
 pipeline.fit(X_train, y_train)
-pred_train = pipeline.predict(X_train)
-pred_test = pipeline.predict(X_test)
+y_train = np.exp(y_train)
+y_test = np.exp(y_test)
+pred_train = np.exp(pipeline.predict(X_train))
+pred_test = np.exp(pipeline.predict(X_test))
 
 # Determine metrics
-print('Average house price: ', int(np.exp(y_train).median()))
+print('Average house price: ', int(y_train.median()))
 print()
 
 print('Train set:')
 print('R2: {}'.format(
-    r2_score(np.exp(y_train), np.exp(pred_train))))
+    r2_score(y_train, pred_train)))
 print('RMSE: {}'.format(int(
-    mean_squared_error(np.exp(y_train), np.exp(pred_train), squared=False))))
+    mean_squared_error(y_train, pred_train, squared=False))))
 print('MAE: {}'.format(int(
-    mean_absolute_error(np.exp(y_train), np.exp(pred_train)))))
+    mean_absolute_error(y_train, pred_train))))
 print('MAPE: {}'.format(int(
-    mean_absolute_percentage_error(np.exp(y_train), np.exp(pred_train)))))
+    mean_absolute_percentage_error(y_train, pred_train))))
 print()
 
 print('Test set:')
 print('R2: {}'.format(
-    r2_score(np.exp(y_test), np.exp(pred_test))))
+    r2_score(y_test, pred_test)))
 print('RMSE: {}'.format(int(
-    mean_squared_error(np.exp(y_test), np.exp(pred_test), squared=False))))
+    mean_squared_error(y_test, pred_test, squared=False))))
 print('MAE: {}'.format(int(
-    mean_absolute_error(np.exp(y_test), np.exp(pred_test)))))
+    mean_absolute_error(y_test, pred_test))))
 print('MAPE: {}'.format(int(
-    mean_absolute_percentage_error(np.exp(y_test), np.exp(pred_test)))))
+    mean_absolute_percentage_error(y_test, pred_test))))
 print()
 
 # Visually evaluate predictions

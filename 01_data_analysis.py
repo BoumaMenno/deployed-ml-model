@@ -160,7 +160,14 @@ data[continuousFeatures].hist(bins=30, figsize=(15,15))
 plt.show()
 
 """ Data is heavily skewed, and not all variables can be transformed using a log transformation. To do: which transformation to use? """
+# log transformation on positive-only features
 
+# yeo-johnson transformation on features with values <= 0
+
+# binarize heavily skewed features
+
+
+# save features to config
 config = {  "CATEGORICAL_FEATURES" : categoricalFeatures,
             "CATEGORICAL_WITH_MISSING" : [ feat for feat in categoricalWithMissing if feat not in featuresWithHighMissing],
             "CATEGORICAL_WITH_HIGH_MISSING" : featuresWithHighMissing,
