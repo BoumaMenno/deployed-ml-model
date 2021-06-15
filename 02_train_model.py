@@ -10,7 +10,6 @@ import numpy as np
 
 # plotting
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 # dumping and loading
 import joblib
@@ -21,7 +20,7 @@ import transformers
 # sklearn
 from sklearn.feature_selection import SelectFromModel
 from sklearn.linear_model import Lasso
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error, mean_absolute_percentage_error
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler
@@ -46,9 +45,6 @@ from feature_engine.wrappers import SklearnTransformerWrapper
 # load config
 with open('config.yml') as infile:
       config = yaml.load(infile, Loader=yaml.FullLoader)
-
-
-# import preprocessors as pp
 
 # pre-process data
 data = pd.read_csv('data/train.csv')
@@ -111,27 +107,49 @@ pipeline = Pipeline([
 
 # make predictions for train set
 pipeline.fit(X_train, y_train)
-pred = pipeline.predict(X_train)
+pred_train = pipeline.predict(X_train)
+pred_test = pipeline.predict(X_test)
 
-# determine mse, rmse and r2
-print('train mse: {}'.format(int(
-    mean_squared_error(np.exp(y_train), np.exp(pred)))))
-print('train rmse: {}'.format(int(
-    mean_squared_error(np.exp(y_train), np.exp(pred), squared=False))))
-print('train r2: {}'.format(
-    r2_score(np.exp(y_train), np.exp(pred))))
-print()
-
-# make predictions for test set
-pred = pipeline.predict(X_test)
-
-# determine mse, rmse and r2
-print('test mse: {}'.format(int(
-    mean_squared_error(np.exp(y_test), np.exp(pred)))))
-print('test rmse: {}'.format(int(
-    mean_squared_error(np.exp(y_test), np.exp(pred), squared=False))))
-print('test r2: {}'.format(
-    r2_score(np.exp(y_test), np.exp(pred))))
-print()
-
+# Determine metrics
 print('Average house price: ', int(np.exp(y_train).median()))
+print()
+
+print('Train set:')
+print('R2: {}'.format(
+    r2_score(np.exp(y_train), np.exp(pred_train))))
+print('RMSE: {}'.format(int(
+    mean_squared_error(np.exp(y_train), np.exp(pred_train), squared=False))))
+print('MAE: {}'.format(int(
+    mean_absolute_error(np.exp(y_train), np.exp(pred_train)))))
+print('MAPE: {}'.format(int(
+    mean_absolute_percentage_error(np.exp(y_train), np.exp(pred_train)))))
+print()
+
+print('Test set:')
+print('R2: {}'.format(
+    r2_score(np.exp(y_test), np.exp(pred_test))))
+print('RMSE: {}'.format(int(
+    mean_squared_error(np.exp(y_test), np.exp(pred_test), squared=False))))
+print('MAE: {}'.format(int(
+    mean_absolute_error(np.exp(y_test), np.exp(pred_test)))))
+print('MAPE: {}'.format(int(
+    mean_absolute_percentage_error(np.exp(y_test), np.exp(pred_test)))))
+print()
+
+# Visually evaluate predictions
+fig, ax = plt.subplots()
+ax.scatter(y_test, pred_test, zorder=1)
+lims = [
+    np.min([ax.get_xlim(), ax.get_ylim()]),  # min of both axes
+    np.max([ax.get_xlim(), ax.get_ylim()]),  # max of both axes
+]
+ax.plot(lims, lims, 'k-', alpha=0.75, zorder=0)
+ax.set_aspect('equal')
+ax.set_xlim(lims)
+ax.set_ylim(lims)
+plt.xlabel('True House Price')
+plt.ylabel('Predicted House Price')
+plt.title('True house prices vs predicted house prices')
+
+# dump pipeline
+joblib.dump(pipeline, 'pipeline.joblib') 
