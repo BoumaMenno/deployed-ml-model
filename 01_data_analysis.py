@@ -7,6 +7,7 @@ Created on Sat Jun  5 19:00:10 2021
 # imports
 import pandas as pd
 import numpy as np
+from scipy import stats
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -160,11 +161,22 @@ data[continuousFeatures].hist(bins=30, figsize=(15,15))
 plt.show()
 
 """ Data is heavily skewed, and not all variables can be transformed using a log transformation. To do: which transformation to use? """
+positiveContinuousFeatures = [feat for feat in continuousFeatures if (data[feat]<= 0).sum() == 0]
 # log transformation on positive-only features
-
-# yeo-johnson transformation on features with values <= 0
+np.log(data[positiveContinuousFeatures]).hist(bins=30, figsize=(15,15))
 
 # binarize heavily skewed features
+heavilySkewedFeatures = ['BsmtFinSF2', 'LowQualFinSF', 'EnclosedPorch','3SsnPorch', 'ScreenPorch', 'MiscVal']
+
+for feat in heavilySkewedFeatures:
+    plt.figure()
+    plt.hist(np.where(data[feat]==0, 0, 1), bins=2, label =["1","0"])
+
+# yeo-johnson transformation on others
+yeojohnsonFeatures = [feat for feat in continuousFeatures if feat not in positiveContinuousFeatures+heavilySkewedFeatures]
+
+
+
 
 
 # save features to config
