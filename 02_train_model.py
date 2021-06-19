@@ -18,12 +18,11 @@ import yaml
 import transformers
 
 # sklearn
-from sklearn.feature_selection import SelectFromModel
 from sklearn.linear_model import Lasso
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error, mean_absolute_percentage_error
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, Binarizer
 
 # from feature-engine
 from feature_engine.imputation import (
@@ -38,7 +37,7 @@ from feature_engine.encoding import (
 )
 
 from feature_engine.creation import CombineWithReferenceFeature
-from feature_engine.transformation import LogTransformer
+from feature_engine.transformation import LogTransformer, YeoJohnsonTransformer
 from feature_engine.selection import DropFeatures
 from feature_engine.wrappers import SklearnTransformerWrapper
 
@@ -79,6 +78,12 @@ pipeline = Pipeline([
     ('elapsed_time', CombineWithReferenceFeature(variables_to_combine=config["REFERENCE_FEATURE"], reference_variables=config["YEAR_FEATURES"])),
 
     ('drop_features', DropFeatures(features_to_drop=config["REFERENCE_FEATURE"])),
+    
+    ('log', LogTransformer(variables=config["POSITIVE_CONTINUOUS_FEATURES"])),
+    
+    ('yeojohnson', YeoJohnsonTransformer(variables=config["YEOJOHNSON_FEATURES"])),
+    
+    ('binarizer', SklearnTransformerWrapper(transformer=Binarizer(threshold=0), variables=config["HEAVILY_SKEWED_FEATURES"])),
 
     # apply mappings to categorical features
     ('mapper_qual', transformers.Mapper(variables=config["QUALITY_FEATURES"], mappings=config["QUALITY_MAP"])),
@@ -98,7 +103,7 @@ pipeline = Pipeline([
     ('categorical_encoder', OrdinalEncoder(encoding_method='ordered', variables=config["UNMAPPED_CATEGORICAL_FEATURES"])),
     
     ('scaler', MinMaxScaler()),
-#     ('selector', SelectFromModel(Lasso(alpha=0.001, random_state=0))),
+    
     ('Lasso', Lasso(alpha=0.001, random_state=0)),
 ])
 

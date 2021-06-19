@@ -170,14 +170,12 @@ heavilySkewedFeatures = ['BsmtFinSF2', 'LowQualFinSF', 'EnclosedPorch','3SsnPorc
 
 for feat in heavilySkewedFeatures:
     plt.figure()
-    plt.hist(np.where(data[feat]==0, 0, 1), bins=2, label =["1","0"])
+    plt.title(feat)
+    plt.xticks([0, 1], ['1', '0'])
+    plt.hist(np.where(data[feat]==0, 0, 1), bins=2)
 
 # yeo-johnson transformation on others
 yeojohnsonFeatures = [feat for feat in continuousFeatures if feat not in positiveContinuousFeatures+heavilySkewedFeatures]
-
-
-
-
 
 # save features to config
 config = {  "CATEGORICAL_FEATURES" : categoricalFeatures,
@@ -198,6 +196,9 @@ config = {  "CATEGORICAL_FEATURES" : categoricalFeatures,
             "NUMERICAL_WITH_MISSING" : numericalWithMissing,
             "YEAR_FEATURES" : yearFeatures,
             "REFERENCE_FEATURE" : referenceFeature,
+            "POSITIVE_CONTINUOUS_FEATURES" : positiveContinuousFeatures,
+            "HEAVILY_SKEWED_FEATURES" : heavilySkewedFeatures,
+            "YEOJOHNSON_FEATURES" : yeojohnsonFeatures,
             "FEATURES" : categoricalFeatures+numericalFeatures,
               }
 

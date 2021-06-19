@@ -175,6 +175,13 @@ GARAGE_FINISH_MAP:
   NA: 0
   RFn: 2
   Unf: 1
+HEAVILY_SKEWED_FEATURES:
+- BsmtFinSF2
+- LowQualFinSF
+- EnclosedPorch
+- 3SsnPorch
+- ScreenPorch
+- MiscVal
 NUMERICAL_FEATURES:
 - LotFrontage
 - LotArea
@@ -215,6 +222,11 @@ NUMERICAL_WITH_MISSING:
 - LotFrontage
 - MasVnrArea
 - GarageYrBlt
+POSITIVE_CONTINUOUS_FEATURES:
+- LotFrontage
+- LotArea
+- 1stFlrSF
+- GrLivArea
 QUALITY_FEATURES:
 - ExterQual
 - ExterCond
@@ -269,3 +281,12 @@ YEAR_FEATURES:
 - YearBuilt
 - YearRemodAdd
 - GarageYrBlt
+YEOJOHNSON_FEATURES:
+- MasVnrArea
+- BsmtFinSF1
+- BsmtUnfSF
+- TotalBsmtSF
+- 2ndFlrSF
+- GarageArea
+- WoodDeckSF
+- OpenPorchSF
